@@ -91,19 +91,36 @@ public class ProductoController {
         productoService.eliminarProducto(id);
     }
 
-    // Nuevo: Aumentar precio de un producto por ID
+    @DeleteMapping("/eliminar/marca")
+    public void eliminarPorMarca(@RequestParam String marca) {
+        productoService.eliminarPorMarca(marca);
+    }
+
+    @DeleteMapping("/eliminar/stock")
+    public void eliminarProductosSinStock() {
+        productoService.eliminarProductosSinStock();
+    }
+
+    @DeleteMapping("/eliminar/categoria")
+    public void eliminarPorCategoria(@RequestParam String categoria) {
+        productoService.eliminarPorCategoria(categoria);
+    }
+
+    @DeleteMapping("/eliminar/vencidos")
+    public void eliminarProductosVencidos() {
+        productoService.eliminarProductosVencidos();
+    }
+
     @PatchMapping("/{id}/aumentar-precio")
     public void aumentarPrecioProducto(@PathVariable Long id, @RequestParam double porcentaje) {
         productoService.aumentarPrecioProducto(id, porcentaje);
     }
 
-    // Nuevo: Aumentar precio de todos los productos
     @PatchMapping("/aumentar-precio-todos")
     public void aumentarPrecioTodos(@RequestParam double porcentaje) {
         productoService.aumentarPrecioTodos(porcentaje);
     }
 
-    // Nuevo: Aumentar precio de productos por categoría
     @PatchMapping("/aumentar-precio-categoria")
     public void aumentarPrecioPorCategoria(@RequestParam String categoria, @RequestParam double porcentaje) {
         productoService.aumentarPrecioPorCategoria(categoria, porcentaje);
