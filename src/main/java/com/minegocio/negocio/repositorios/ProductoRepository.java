@@ -44,4 +44,19 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     @Modifying
     @Query("UPDATE Producto p SET p.precioUnitario = p.precioUnitario * (1 + :porcentaje / 100) WHERE p.id = :id")
     void aumentarPrecioProducto(Long id, double porcentaje);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Producto p SET p.precioUnitario = p.precioUnitario * (1 - :porcentaje / 100) WHERE LOWER(p.marca) = LOWER(:marca)")
+    void aplicarDescuentoPorMarca(String marca, double porcentaje);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Producto p SET p.precioUnitario = p.precioUnitario * (1 - :porcentaje / 100) WHERE p.stock <= :stockMinimo")
+    void aplicarDescuentoPorStock(int stockMinimo, double porcentaje);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Producto p SET p.precioUnitario = p.precioUnitario * (1 - :porcentaje / 100) WHERE LOWER(p.categoria) = LOWER(:categoria)")
+    void aplicarDescuentoPorCategoria(String categoria, double porcentaje);
 }
