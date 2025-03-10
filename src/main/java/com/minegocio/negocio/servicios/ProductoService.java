@@ -100,4 +100,20 @@ public class ProductoService {
     public void aplicarDescuentoPorCategoria(String categoria, double porcentaje) {
         productoRepository.aplicarDescuentoPorCategoria(categoria, porcentaje);
     }
+
+    public void eliminarPorMarca(String marca) {
+        productoRepository.eliminarPorMarca(marca);
+    }
+
+    public void eliminarProductosSinStock() {
+        productoRepository.eliminarProductosSinStock();
+    }
+
+    public void eliminarPorCategoria(String categoria) {
+        productoRepository.eliminarPorCategoria(categoria);
+    }
+
+    public void eliminarProductosVencidos() {
+        productoRepository.eliminarProductosVencidos();
+    }
 }
