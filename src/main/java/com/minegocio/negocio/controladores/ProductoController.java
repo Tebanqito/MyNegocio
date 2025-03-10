@@ -71,6 +71,21 @@ public class ProductoController {
         productoService.aumentarPrecios(porcentaje, categoria);
     }
 
+    @PutMapping("/descuento/marca")
+    public void aplicarDescuentoPorMarca(@RequestParam String marca, @RequestParam double porcentaje) {
+        productoService.aplicarDescuentoPorMarca(marca, porcentaje);
+    }
+
+    @PutMapping("/descuento/stock")
+    public void aplicarDescuentoPorStock(@RequestParam int stockMinimo, @RequestParam double porcentaje) {
+        productoService.aplicarDescuentoPorStock(stockMinimo, porcentaje);
+    }
+
+    @PutMapping("/descuento/categoria")
+    public void aplicarDescuentoPorCategoria(@RequestParam String categoria, @RequestParam double porcentaje) {
+        productoService.aplicarDescuentoPorCategoria(categoria, porcentaje);
+    }
+
     @DeleteMapping("/{id}")
     public void eliminarProducto(@PathVariable Long id) {
         productoService.eliminarProducto(id);
