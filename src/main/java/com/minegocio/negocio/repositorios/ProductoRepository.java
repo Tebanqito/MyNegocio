@@ -12,20 +12,15 @@ import java.util.List;
 
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
-    // Filtrar por categoría
     List<Producto> findByCategoriaIgnoreCase(String categoria);
 
-    // Filtrar por rango de precios
     List<Producto> findByPrecioUnitarioBetween(Double precioMin, Double precioMax);
 
-    // Filtrar por stock
     List<Producto> findByStockBetween(Integer stockMin, Integer stockMax);
 
-    // Filtrar por fecha de vencimiento
     @Query("SELECT p FROM Producto p WHERE p.fechaDeVencimiento BETWEEN :desde AND :hasta")
     List<Producto> filtrarPorFechaDeVencimiento(@Param("desde") LocalDate desde, @Param("hasta") LocalDate hasta);
 
-    // Filtrar por nombre o código de barras
     @Query("SELECT p FROM Producto p WHERE LOWER(p.nombre) LIKE LOWER(CONCAT('%', :busqueda, '%')) " +
             "OR p.codigoDeBarras LIKE CONCAT('%', :busqueda, '%')")
     List<Producto> filtrarPorNombreOCodigo(@Param("busqueda") String busqueda);
@@ -59,4 +54,24 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     @Modifying
     @Query("UPDATE Producto p SET p.precioUnitario = p.precioUnitario * (1 - :porcentaje / 100) WHERE LOWER(p.categoria) = LOWER(:categoria)")
     void aplicarDescuentoPorCategoria(String categoria, double porcentaje);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Producto p WHERE LOWER(p.marca) = LOWER(:marca)")
+    void eliminarPorMarca(String marca);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Producto p WHERE p.stock = 0")
+    void eliminarProductosSinStock();
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Producto p WHERE LOWER(p.categoria) = LOWER(:categoria)")
+    void eliminarPorCategoria(String categoria);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Producto p WHERE p.fechaDeVencimiento IS NOT NULL AND p.fechaDeVencimiento < CURRENT_DATE")
+    void eliminarProductosVencidos();
 }
