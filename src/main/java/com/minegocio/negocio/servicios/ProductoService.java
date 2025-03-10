@@ -88,4 +88,16 @@ public class ProductoService {
     public void aumentarPrecioPorCategoria(String categoria, double porcentaje) {
         productoRepository.aumentarPrecioPorCategoria(categoria, porcentaje);
     }
+
+    public void aplicarDescuentoPorMarca(String marca, double porcentaje) {
+        productoRepository.aplicarDescuentoPorMarca(marca, porcentaje);
+    }
+
+    public void aplicarDescuentoPorStock(int stockMinimo, double porcentaje) {
+        productoRepository.aplicarDescuentoPorStock(stockMinimo, porcentaje);
+    }
+
+    public void aplicarDescuentoPorCategoria(String categoria, double porcentaje) {
+        productoRepository.aplicarDescuentoPorCategoria(categoria, porcentaje);
+    }
 }
