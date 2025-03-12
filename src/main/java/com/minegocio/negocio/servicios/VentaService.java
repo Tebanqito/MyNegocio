@@ -18,6 +18,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
@@ -128,5 +129,25 @@ public class VentaService {
                     header.setPhrase(new Phrase(columnTitle));
                     table.addCell(header);
                 });
+    }
+
+    public List<Venta> obtenerPorFecha(LocalDate fecha) {
+        return ventaRepository.findByFechaBetween(fecha.atStartOfDay(), fecha.plusDays(1).atStartOfDay());
+    }
+
+    public List<Venta> obtenerPorRangoFechas(LocalDate desde, LocalDate hasta) {
+        return ventaRepository.findByFechaBetween(desde.atStartOfDay(), hasta.plusDays(1).atStartOfDay());
+    }
+
+    public List<Venta> obtenerPorCliente(String cliente) {
+        return ventaRepository.findByClienteIgnoreCase(cliente);
+    }
+
+    public List<Venta> obtenerPorMontoMinimo(double minimo) {
+        return ventaRepository.findByTotalGreaterThanEqual(minimo);
+    }
+
+    public List<Venta> obtenerPorProducto(String nombreProducto) {
+        return ventaRepository.findByProducto(nombreProducto);
     }
 }
