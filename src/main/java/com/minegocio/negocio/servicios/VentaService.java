@@ -2,13 +2,14 @@ package com.minegocio.negocio.servicios;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.minegocio.negocio.entidades.Cliente;
 import com.minegocio.negocio.entidades.Producto;
 import com.minegocio.negocio.entidades.Venta;
 import com.minegocio.negocio.entidades.VentaDetalle;
+import com.minegocio.negocio.repositorios.ClienteRepository;
 import com.minegocio.negocio.repositorios.ProductoRepository;
 import com.minegocio.negocio.repositorios.VentaRepository;
 import com.minegocio.negocio.requests.VentaRequestDetalle;
-import com.minegocio.negocio.util.MathUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,9 @@ public class VentaService {
     private VentaRepository ventaRepository;
 
     @Autowired
+    private ClienteRepository clienteRepository;
+
+    @Autowired
     private ProductoRepository productoRepository;
 
     public List<Venta> listarVentas() {
@@ -35,49 +39,41 @@ public class VentaService {
     }
 
     @Transactional
-    public Venta registrarVenta(String cliente, List<VentaRequestDetalle> detalles) {
-        if (detalles == null || detalles.isEmpty()) {
-            throw new IllegalArgumentException("Debe incluir al menos un producto en la venta.");
-        }
-
+    public Venta registrarVenta(Long clienteId, List<VentaRequestDetalle> detalles) {
         Venta venta = new Venta();
-        venta.setCliente(cliente);
         venta.setFecha(LocalDateTime.now());
+
+        if (clienteId != null) {
+            Cliente cliente = clienteRepository.findById(clienteId).orElseThrow();
+            venta.setCliente(cliente);
+        }
 
         double total = 0.0;
 
         for (VentaRequestDetalle detalleRequest : detalles) {
-            Producto producto = productoRepository.findById(detalleRequest.getProductoId())
-                    .orElseThrow(() -> new IllegalArgumentException(
-                            "Producto con ID " + detalleRequest.getProductoId() + " no encontrado."));
+            Producto producto = productoRepository.findById(detalleRequest.getProductoId()).orElseThrow();
 
             if (producto.getStock() < detalleRequest.getCantidad()) {
-                throw new IllegalArgumentException(
-                        "Stock insuficiente para el producto: " + producto.getNombre());
+                throw new IllegalArgumentException("Stock insuficiente para el producto: " + producto.getNombre());
             }
 
-            // Actualizar stock del producto
             producto.setStock(producto.getStock() - detalleRequest.getCantidad());
             productoRepository.save(producto);
 
-            // Crear detalle de la venta
             VentaDetalle detalle = new VentaDetalle();
             detalle.setProducto(producto);
             detalle.setCantidad(detalleRequest.getCantidad());
             detalle.setPrecioUnitario(producto.getPrecioUnitario());
-            detalle.setSubtotal(MathUtils.redondearPrecio(detalleRequest.getCantidad() * producto.getPrecioUnitario()));
+            detalle.setSubtotal(detalleRequest.getCantidad() * producto.getPrecioUnitario());
 
-            // Agregar el detalle a la venta
             venta.getDetalles().add(detalle);
             total += detalle.getSubtotal();
         }
 
-        // Establecer el total de la venta
-        venta.setTotal(MathUtils.redondearPrecio(total));
-
-        // Guardar la venta
+        venta.setTotal(total);
         return ventaRepository.save(venta);
     }
+
 
     public byte[] generarRecibo(Long ventaId) {
         Venta venta = ventaRepository.findById(ventaId)
