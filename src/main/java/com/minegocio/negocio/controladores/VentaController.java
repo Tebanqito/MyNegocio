@@ -40,7 +40,7 @@ public class VentaController {
 
     @PostMapping
     public Venta registrarVenta(@RequestBody VentaRequest request) {
-        return ventaService.registrarVenta(request.getCliente(), request.getDetalles());
+        return ventaService.registrarVenta(request.getClienteId(), request.getDetalles());
     }
 
 }
