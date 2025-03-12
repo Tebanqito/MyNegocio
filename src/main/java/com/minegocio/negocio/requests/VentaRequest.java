@@ -1,27 +1,26 @@
 package com.minegocio.negocio.requests;
 
-import com.minegocio.negocio.controladores.VentaController;
 
 import java.util.List;
 
 public class VentaRequest {
-    private String cliente;
+    private Long clienteId;
     private List<VentaRequestDetalle> detalles;
 
     public VentaRequest() {
     }
 
-    public VentaRequest(String cliente, List<VentaRequestDetalle> detalles) {
-        this.cliente = cliente;
+    public VentaRequest(Long clienteId, List<VentaRequestDetalle> detalles) {
+        this.clienteId = clienteId;
         this.detalles = detalles;
     }
 
-    public String getCliente() {
-        return cliente;
+    public Long getClienteId() {
+        return clienteId;
     }
 
-    public void setCliente(String cliente) {
-        this.cliente = cliente;
+    public void setClienteId(Long clienteId) {
+        this.clienteId = clienteId;
     }
 
     public List<VentaRequestDetalle> getDetalles() {
