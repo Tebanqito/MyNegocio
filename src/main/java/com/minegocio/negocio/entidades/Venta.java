@@ -4,7 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Column;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.CascadeType;
 
@@ -18,8 +19,9 @@ public class Venta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = true)
-    private String cliente;
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = true) // Puede ser null si es una venta sin cliente
+    private Cliente cliente;
     private LocalDateTime fecha;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -31,7 +33,7 @@ public class Venta {
     public Venta() {
     }
 
-    public Venta(Long id, String cliente, LocalDateTime fecha, List<VentaDetalle> detalles, double total) {
+    public Venta(Long id, Cliente cliente, LocalDateTime fecha, List<VentaDetalle> detalles, double total) {
         this.id = id;
         this.cliente = cliente;
         this.fecha = fecha;
@@ -47,11 +49,11 @@ public class Venta {
         this.id = id;
     }
 
-    public String getCliente() {
+    public Cliente getCliente() {
         return cliente;
     }
 
-    public void setCliente(String cliente) {
+    public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
 
