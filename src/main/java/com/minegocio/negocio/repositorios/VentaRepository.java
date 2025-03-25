@@ -11,7 +11,8 @@ import java.util.List;
 public interface VentaRepository extends JpaRepository<Venta, Long> {
     List<Venta> findByFechaBetween(LocalDateTime inicio, LocalDateTime fin);
 
-    List<Venta> findByClienteIgnoreCase(String cliente);
+    @Query("SELECT v FROM Venta v WHERE LOWER(v.cliente.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))")
+    List<Venta> findByClienteNombreIgnoreCase(@Param("nombre") String nombre);
 
     // Filtrar por monto mínimo
     List<Venta> findByTotalGreaterThanEqual(double total);

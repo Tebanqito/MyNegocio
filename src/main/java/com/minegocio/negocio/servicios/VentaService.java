@@ -140,7 +140,7 @@ public class VentaService {
     }
 
     public List<Venta> obtenerPorCliente(String cliente) {
-        return ventaRepository.findByClienteIgnoreCase(cliente);
+        return ventaRepository.findByClienteNombreIgnoreCase(cliente);
     }
 
     public List<Venta> obtenerPorMontoMinimo(double minimo) {
