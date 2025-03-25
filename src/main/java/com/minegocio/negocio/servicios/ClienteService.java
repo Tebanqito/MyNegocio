@@ -5,6 +5,8 @@ import com.minegocio.negocio.repositorios.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 public class ClienteService {
@@ -30,6 +32,23 @@ public class ClienteService {
 
     public void eliminarCliente(Long id) {
         clienteRepository.deleteById(id);
+    }
+
+    public List<Cliente> obtenerPorNombre(String nombre) {
+        return clienteRepository.findByNombre(nombre);
+    }
+
+    public Optional<Cliente> obtenerPorEmail(String email) {
+        return clienteRepository.findByEmail(email);
+    }
+
+    public List<Cliente> obtenerPorTelefono(String telefono) {
+        return clienteRepository.findByTelefono(telefono);
+    }
+
+
+    public List<Cliente> obtenerClientesFrecuentes(int minCompras) {
+        return clienteRepository.findByComprasMinimas(minCompras);
     }
 }
 
