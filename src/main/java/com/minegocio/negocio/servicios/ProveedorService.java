@@ -36,5 +36,37 @@ public class ProveedorService {
         }
         proveedorRepository.deleteById(id);
     }
+
+    public List<Proveedor> buscarPorNombre(String nombre) {
+        return proveedorRepository.findByNombreIgnoreCase(nombre);
+    }
+
+    public List<Proveedor> buscarPorContacto(String contacto) {
+        return proveedorRepository.findByContactoIgnoreCase(contacto);
+    }
+
+    public List<Proveedor> buscarPorTelefono(String telefono) {
+        return proveedorRepository.findByTelefono(telefono);
+    }
+
+    public List<Proveedor> buscarPorTelefonoParcial(String telefono) {
+        return proveedorRepository.findByTelefonoContaining(telefono);
+    }
+
+    public List<Proveedor> buscarPorPrefijoNombre(String prefijo) {
+        return proveedorRepository.findByNombreStartingWithIgnoreCase(prefijo);
+    }
+
+    public List<Proveedor> buscarPorSufijoNombre(String sufijo) {
+        return proveedorRepository.findByNombreEndingWithIgnoreCase(sufijo);
+    }
+
+    public List<Proveedor> buscarProveedoresConContacto() {
+        return proveedorRepository.findByContactoIsNotNull();
+    }
+
+    public List<Proveedor> buscarProveedoresSinTelefono() {
+        return proveedorRepository.findByTelefonoIsNull();
+    }
 }
 
