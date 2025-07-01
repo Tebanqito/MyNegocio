@@ -5,6 +5,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -14,13 +16,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf.disable()) // 🔒 Desactivamos CSRF para permitir POST desde Postman
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/public/**").permitAll() // Rutas públicas
-                        .anyRequest().authenticated() // Todas las demás requieren autenticación
+                        .requestMatchers("/usuario/registrar").permitAll() // ✅ Habilitar ruta pública
+                        .anyRequest().authenticated()
                 )
-                .formLogin(login -> login // Habilita el formulario de login
-                        .loginPage("/login") // Ruta de la página de login
-                        .permitAll()
+                .formLogin(login -> login
+                        .loginPage("/login") // Si después creás un formulario de login con Thymeleaf
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
@@ -39,5 +41,10 @@ public class SecurityConfig {
                 .build();
 
         return new InMemoryUserDetailsManager(user);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

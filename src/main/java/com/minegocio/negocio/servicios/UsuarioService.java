@@ -20,7 +20,9 @@ public class UsuarioService {
         if (usuarioRepository.existsByUsername(username)) {
             return false;
         }
-        Usuario usuario = new Usuario(username, passwordEncoder.encode(password));
+        Usuario usuario = new Usuario();
+        usuario.setUsername(username);
+        usuario.setPassword(passwordEncoder.encode(password));
         usuarioRepository.save(usuario);
         return true;
     }

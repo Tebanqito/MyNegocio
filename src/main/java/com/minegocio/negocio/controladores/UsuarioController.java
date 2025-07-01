@@ -16,6 +16,8 @@ public class UsuarioController {
 
     @PostMapping("/registrar")
     public Map<String, String> registrar(@RequestParam String username, @RequestParam String password) {
+        System.out.println("Se recibió solicitud para registrar usuario: " + username);
+
         Map<String, String> response = new HashMap<>();
         if (usuarioService.hayUsuarioRegistrado()) {
             response.put("mensaje", "Ya existe un usuario registrado. No se pueden crear más cuentas.");
