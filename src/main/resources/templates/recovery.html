@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Recuperar contraseña</title>
+</head>
+<body>
+<h2>Pantalla de recuperación</h2>
+<form th:action="@{/recovery}" method="post">
+    <label>Nueva contraseña:</label>
+    <input type="password" name="nuevaPassword" required/>
+    <button type="submit">Guardar</button>
+</form>
+</body>
+</html>

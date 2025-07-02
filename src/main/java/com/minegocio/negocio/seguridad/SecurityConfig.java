@@ -18,7 +18,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // 🔒 Desactivamos CSRF para permitir POST desde Postman
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/usuario/registrar").permitAll() // ✅ Habilitar ruta pública
+                        .requestMatchers("/login","/usuario/registrar", "/recovery").permitAll() // ✅ Habilitar ruta pública
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
