@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Recuperar contraseña</title>
-</head>
+<head><title>Recuperar contraseña</title></head>
 <body>
-<h2>Pantalla de recuperación</h2>
+<h2>Restablecer contraseña</h2>
+
+<!-- Mostrar mensaje de error si viene flag ?error -->
+<p th:if="${param.error}" style="color:red">
+    Usuario incorrecto. Inténtalo otra vez.
+</p>
+
 <form th:action="@{/recovery}" method="post">
+    <label>Usuario:</label>
+    <input name="username" required/><br/>
+
     <label>Nueva contraseña:</label>
-    <input type="password" name="nuevaPassword" required/>
+    <input type="password" name="nuevaPassword" required/><br/>
+
     <button type="submit">Guardar</button>
 </form>
 </body>
 </html>
+
